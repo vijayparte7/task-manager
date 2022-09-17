@@ -1,0 +1,287 @@
+<html xmlns:th="http://www.thymeleaf.org/">
+<head>
+<meta charset="utf-8">
+<link rel="icon" href="favicon.ico" type="image/x-icon" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css"
+	rel="stylesheet"
+	integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor"
+	crossorigin="anonymous">
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<style type="text/css">
+tr:nth-child(even) {
+	background-color: #051937;
+	color: white;
+}
+
+th {
+	background-color: #051937;
+	color: white;
+}
+
+tr:nth-child(odd) {
+	background-color: #DCD7C9  ;
+}
+
+tr:hover {
+	background-color: #2C3639;
+	color: white;
+}
+
+table, td, th {
+	border: 1px solid black;
+	text-align: left;
+}
+ th {
+	padding: 1vw;
+}
+ td {
+	padding: 0.4vw;
+}
+
+table {
+	border-collapse: collapse;
+	width: 100%;
+}
+
+a.hover {
+	text-decoration: none !important;
+	color: white;
+}
+
+.mybtn:hover {
+	opacity: 0.8;
+	text-decoration: none !important;
+	color: white;
+}
+
+.mybtn {
+	text-decoration: none !important;
+	background-color: DodgerBlue;
+	border: none;
+	color: white;
+	border-radius: 12px;
+	padding: 1.5vh 3vw;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 16px;
+	margin: 4px 2px;
+	transition-duration: 0.4s;
+	cursor: pointer;
+}
+
+@media only screen and (max-width: 600px) {
+	header {
+		padding: 12vh;
+	}
+	table {
+		font-size: 3vw;
+	}
+	h1 {
+		padding-top: 3vh;
+		padding-bottom: 3vh;
+		font-size: 6vw;
+	}
+	.mybtn {
+		text-decorationn: none;
+		border: none;
+		border-radius: 2vw;
+		padding: 1vw 2vw;
+		font-size: 2.8vw;
+	}
+}
+</style>
+<title></title>
+</head>
+<body
+	style="background-image: linear-gradient(to bottom, #051937, #004d7a, #008793, #00bf72, #a8eb12);">
+
+	<div class="mainbody" style="">
+		<header class=" text-dark sticky-top"
+			style="padding-top: 1%; padding-bottom: 1%; background-color: #051937;">
+			<h1 style="margin: 2vw; text-align: center; color: white;">
+				<b>Task Manager</b>
+			</h1>
+		</header>
+
+
+		<button style="margin-left: 10vw; margin-top: 3%;" type="button"
+			class="mybtn" data-toggle="modal" data-target="#exampleModal">
+			Create Task</button>
+		<a
+			style="float: right; margin-right: 10vw; text-decorationn: none; background-color: #cc6699; margin-top: 3%;"
+			type="button" class="mybtn" href="logout" role="button">log out</a> <br />
+		<br />
+		<div class="table" style="width: 100%; padding: 2vw;">
+			<table class="" style="overflow-x: auto;">
+				<thead>
+					<tr>
+						<th scope="col">#</th>
+						<th scope="col">Task Name</th>
+						<th scope="col">Description</th>
+						<th scope="col">owner</th>
+						<th scope="col">Action</th>
+						<th scope="col">Action</th>
+					</tr>
+				</thead>
+				<tbody>
+						<tr th:each="task:${tasks}" th:with="i=${1}">
+							<td th:text="${taskStat.index + 1}">*</td>
+							<td th:text="${task.taskname}"></td>
+							<td th:text="${task.description}"></td>
+							<td th:text="${task.owner}"></td>
+							<td style="text-align: center;"><a th:href="@{/delete(id=${task.id})}" class="mybtn" 
+								style="background-color: #ff3333;" role="button">Delete</a></td>
+							<td style="text-align: center;"><button
+									th:onclick="myFunction([[${task.id}]],[[${task.taskname}]],[[${task.description}]],[[${task.owner}]])"
+									style="background-color: DarkTurquoise;" type="button"
+									name="id" class="mybtn" data-toggle="modal"
+									data-target=".exampleModalCenter">Update</button></td>
+						</tr>
+					
+				</tbody>
+			</table>
+		</div>
+		<br />
+
+
+		<script type="text/javascript">
+function myFunction(id,taskname,desc,owner) {
+	 var x = document.getElementsByClassName('updated')[0];
+	  x[0].value = taskname;
+	  x[1].value = desc;
+	  x[2].value = owner;
+	  x[3].value = id;
+	  console.log(x[3].value);
+	}
+</script>
+
+
+
+
+
+
+
+		<div class="modal fade exampleModalCenter" id="" tabindex="-1"
+			role="dialog" aria-labelledby="exampleModalCenterTitle"
+			aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="exampleModalLongTitle">Update
+							Task</h5>
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<form class="needs-validation updated" novalidate method="post"
+							action="taskupdate">
+							<div class="form-group">
+								<label for="validationCustom01">Task Name</label> <input
+									type="text" class="form-control" id="validationCustom01"
+									placeholder="taskname" name="taskname" required>
+								<div class="valid-feedback"></div>
+								<label for="validationCustom02">Description</label> <input
+									type="text" class="form-control" id="validationCustom02"
+									placeholder="description" name="description" required>
+								<div class="valid-feedback"></div>
+								<label for="validationCustom02">Owner </label> <input
+									type="text" class="form-control" id="validationCustom02"
+									placeholder="owner" name="owner" required>
+								<div class="valid-feedback"></div>
+								<br> <input type="hidden" name="id"> 
+								<input type="hidden"th:value="${session.username}"  name="username" ><br>
+								<button class="btn btn-primary" type="submit">Submit
+									form</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+
+
+
+
+
+
+		<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+			aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="exampleModalLabel">Create Task</h5>
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<form class="needs-validation" novalidate method="post"
+							action="taskcreate">
+							<div class="form-group">
+								<label for="validationCustom01">Task Name</label> <input
+									type="text" class="form-control" id="validationCustom01"
+									placeholder="taskname" name="taskname" required>
+								<div class="valid-feedback"></div>
+								<label for="validationCustom02">Description</label> <input
+									type="text" class="form-control" id="validationCustom02"
+									placeholder="description" name="description" required>
+								<div class="valid-feedback"></div>
+								<label for="validationCustom02">Owner </label> <input
+									type="text" class="form-control" id="validationCustom02"
+									placeholder="owner" name="owner" required>
+								<div class="valid-feedback"></div>
+								<!-- input type="hidden" name="id" -->
+
+								<input type="hidden"th:value="${session.username}"  name="username" ><br>
+								<button class="btn btn-primary" type="submit">Submit
+									form</button>
+							</div>
+						</form>
+					</div>
+
+				</div>
+			</div>
+		</div>
+
+
+
+
+
+
+		<script>
+// Example starter JavaScript for disabling form submissions if there are invalid fields
+(function() {
+  'use strict';
+  window.addEventListener('load', function() {
+    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+    var forms = document.getElementsByClassName('needs-validation');
+    // Loop over them and prevent submission
+    var validation = Array.prototype.filter.call(forms, function(form) {
+      form.addEventListener('submit', function(event) {
+        if (form.checkValidity() === false) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+      }, false);
+    });
+  }, false);
+})();
+
+</script>
+	</div>
+</body>
+</html>
